@@ -2,22 +2,11 @@ pipeline {
     agent any
     
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/TeamNetrunners/ramitest'
-            }
-        }
-        
-        stage('Build') {
-            steps {
-                sh 'mvn clean install'
-            }
-        }
-        
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube') {
-                    sh 'mvn sonar:sonar'
+                    // Assuming you have already installed and configured SonarQube Scanner
+                    sh 'sonar-scanner'
                 }
             }
         }
@@ -33,10 +22,10 @@ pipeline {
     
     post {
         success {
-            echo 'Build and SonarQube analysis successful!'
+            echo 'SonarQube analysis successful!'
         }
         failure {
-            echo 'Pipeline failed! Check Jenkins logs for details.'
+            echo 'SonarQube analysis failed! Check Jenkins logs for details.'
         }
     }
 }
